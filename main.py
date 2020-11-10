@@ -5,14 +5,13 @@ from pygame.locals import *
 
 from constants import CP, TEST_GRID
 
-N = 20
-
+N = 4
 
 class Py2048:
     def __init__(self):
         self.grid = np.zeros((N, N), dtype=int)
 
-        self.W = 600
+        self.W = 400
         self.H = self.W
         self.SPACING = 10
 
@@ -119,6 +118,15 @@ class Py2048:
                     elif event.key == K_q or event.key == K_ESCAPE:
                         return 'q'
 
+    def game_over(self):
+        grid_bu = self.grid.copy()
+        for move in 'lrud':
+            self.make_move(move)
+            if not all((self.grid == grid_bu).flatten()):
+                self.grid = grid_bu
+                return False
+        return True
+
     def play(self):
         self.new_number(k=2)
 
@@ -131,9 +139,13 @@ class Py2048:
 
             old_grid = self.grid.copy()
             self.make_move(cmd)
-            if all((self.grid == old_grid).flatten()):
-                continue
-            self.new_number()
+            print(game.grid)
+            if self.game_over():
+                print('GAME OVER!')
+                break
+
+            if not all((self.grid == old_grid).flatten()):
+                self.new_number()
 
 
 if __name__ == '__main__':
