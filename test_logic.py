@@ -13,7 +13,6 @@ class Py2048Logic:
 
     def new_number(self, k=1):
         free_poss = list(zip(*np.where(self.grid == 0)))
-
         for pos in random.sample(free_poss, k=k):
             if random.random() < .1:
                 self.grid[pos] = 4
