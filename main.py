@@ -3,9 +3,10 @@ import random
 import pygame
 from pygame.locals import *
 
-from constants import CP, TEST_GRID
+from constants import CP
 
 N = 4
+
 
 class Py2048:
     def __init__(self):
