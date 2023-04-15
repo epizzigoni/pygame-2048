@@ -1,5 +1,6 @@
-import numpy as np
 import random
+
+import numpy as np
 import pygame
 from pygame.locals import *
 
@@ -20,7 +21,7 @@ class Py2048:
         pygame.display.set_caption("2048")
 
         pygame.font.init()
-        self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
+        self.myfont = pygame.font.SysFont("Comic Sans MS", 30)
 
         self.screen = pygame.display.set_mode((self.W, self.H))
 
@@ -30,7 +31,7 @@ class Py2048:
     def new_number(self, k=1):
         free_poss = list(zip(*np.where(self.grid == 0)))
         for pos in random.sample(free_poss, k=k):
-            if random.random() < .1:
+            if random.random() < 0.1:
                 self.grid[pos] = 4
             else:
                 self.grid[pos] = 2
@@ -55,31 +56,31 @@ class Py2048:
 
     def make_move(self, move):
         for i in range(N):
-            if move in 'lr':
+            if move in "lr":
                 this = self.grid[i, :]
             else:
                 this = self.grid[:, i]
 
             flipped = False
-            if move in 'rd':
+            if move in "rd":
                 flipped = True
                 this = this[::-1]
 
             this_n = self._get_nums(this)
 
             new_this = np.zeros_like(this)
-            new_this[:len(this_n)] = this_n
+            new_this[: len(this_n)] = this_n
 
             if flipped:
                 new_this = new_this[::-1]
 
-            if move in 'lr':
+            if move in "lr":
                 self.grid[i, :] = new_this
             else:
                 self.grid[:, i] = new_this
 
     def draw_game(self):
-        self.screen.fill(CP['back'])
+        self.screen.fill(CP["back"])
 
         for i in range(N):
             for j in range(N):
@@ -90,15 +91,18 @@ class Py2048:
                 rect_w = self.W // N - 2 * self.SPACING
                 rect_h = self.H // N - 2 * self.SPACING
 
-                pygame.draw.rect(self.screen,
-                                 CP[n],
-                                 pygame.Rect(rect_x, rect_y, rect_w, rect_h),
-                                 border_radius=8)
+                pygame.draw.rect(
+                    self.screen,
+                    CP[n],
+                    pygame.Rect(rect_x, rect_y, rect_w, rect_h),
+                    border_radius=8,
+                )
                 if n == 0:
                     continue
-                text_surface = self.myfont.render(f'{n}', True, (0, 0, 0))
-                text_rect = text_surface.get_rect(center=(rect_x + rect_w / 2,
-                                                          rect_y + rect_h / 2))
+                text_surface = self.myfont.render(f"{n}", True, (0, 0, 0))
+                text_rect = text_surface.get_rect(
+                    center=(rect_x + rect_w / 2, rect_y + rect_h / 2)
+                )
                 self.screen.blit(text_surface, text_rect)
 
     @staticmethod
@@ -106,22 +110,22 @@ class Py2048:
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    return 'q'
+                    return "q"
                 if event.type == KEYDOWN:
                     if event.key == K_UP:
-                        return 'u'
+                        return "u"
                     elif event.key == K_RIGHT:
-                        return 'r'
+                        return "r"
                     elif event.key == K_LEFT:
-                        return 'l'
+                        return "l"
                     elif event.key == K_DOWN:
-                        return 'd'
+                        return "d"
                     elif event.key == K_q or event.key == K_ESCAPE:
-                        return 'q'
+                        return "q"
 
     def game_over(self):
         grid_bu = self.grid.copy()
-        for move in 'lrud':
+        for move in "lrud":
             self.make_move(move)
             if not all((self.grid == grid_bu).flatten()):
                 self.grid = grid_bu
@@ -135,20 +139,20 @@ class Py2048:
             self.draw_game()
             pygame.display.flip()
             cmd = self.wait_for_key()
-            if cmd == 'q':
+            if cmd == "q":
                 break
 
             old_grid = self.grid.copy()
             self.make_move(cmd)
             print(game.grid)
             if self.game_over():
-                print('GAME OVER!')
+                print("GAME OVER!")
                 break
 
             if not all((self.grid == old_grid).flatten()):
                 self.new_number()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game = Py2048()
     game.play()

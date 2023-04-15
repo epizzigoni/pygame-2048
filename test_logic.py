@@ -1,5 +1,6 @@
-import numpy as np
 import random
+
+import numpy as np
 
 N = 4
 
@@ -14,7 +15,7 @@ class Py2048Logic:
     def new_number(self, k=1):
         free_poss = list(zip(*np.where(self.grid == 0)))
         for pos in random.sample(free_poss, k=k):
-            if random.random() < .1:
+            if random.random() < 0.1:
                 self.grid[pos] = 4
             else:
                 self.grid[pos] = 2
@@ -28,7 +29,7 @@ class Py2048Logic:
             if skip:
                 skip = False
                 continue
-            if j != len(this_n) - 1 and this_n[j] == this_n[j+1]:
+            if j != len(this_n) - 1 and this_n[j] == this_n[j + 1]:
                 new_n = this_n[j] * 2
                 skip = True
             else:
@@ -39,25 +40,25 @@ class Py2048Logic:
 
     def make_move(self, move):
         for i in range(N):
-            if move in 'lr':
+            if move in "lr":
                 this = self.grid[i, :]
             else:
                 this = self.grid[:, i]
 
             flipped = False
-            if move in 'rd':
+            if move in "rd":
                 flipped = True
                 this = this[::-1]
 
             this_n = self._get_nums(this)
 
             new_this = np.zeros_like(this)
-            new_this[:len(this_n)] = this_n
+            new_this[: len(this_n)] = this_n
 
             if flipped:
                 new_this = new_this[::-1]
 
-            if move in 'lr':
+            if move in "lr":
                 self.grid[i, :] = new_this
             else:
                 self.grid[:, i] = new_this
@@ -67,7 +68,7 @@ class Py2048Logic:
         while True:
             print(self.grid)
             cmd = input()
-            if cmd == 'q':
+            if cmd == "q":
                 break
             old_grid = self.grid.copy()
             self.make_move(cmd)
@@ -76,6 +77,6 @@ class Py2048Logic:
             self.new_number()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game = Py2048Logic()
     game.play()
